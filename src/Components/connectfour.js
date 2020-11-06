@@ -98,6 +98,7 @@ class ConnectFour extends React.Component {
 
     // when elements load
     componentDidMount(){
+        document.title = "Connect Four";
         let gameBoard = this.loadBoard();
         let turnHeader = document.getElementById('who-turn');
         turnHeader.innerText = `${this.state.player}'s Turn!`;

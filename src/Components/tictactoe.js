@@ -83,6 +83,7 @@ class TicTacToe extends React.Component {
 
     // when elements have loaded
     componentDidMount(){
+        document.title = "Tic Tac Toe";
         document.getElementById('who-turn').style.margin = '0px';
         document.getElementById('curr-score').style.margin = '5px';
         // theme changing buttons
