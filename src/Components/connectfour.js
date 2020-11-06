@@ -1,4 +1,5 @@
 import React from 'react';
+import Navbar from './navbar.js';
 /* TO DO
 * develop diagonal wins
 * develop across wins
@@ -190,6 +191,7 @@ class ConnectFour extends React.Component {
     render(){
         return(
             <div id="connect4" style={{height:"100vh"}}>
+                <Navbar/>
                 {/* display current turn */}
                 <div style={{textAlign:"center"}}>
                     <h1 style={{color:"black"}} id="who-turn"></h1>

@@ -1,4 +1,5 @@
 import React from 'react';
+import Navbar from './navbar.js';
 
 class TicTacToe extends React.Component {
 
@@ -216,6 +217,7 @@ class TicTacToe extends React.Component {
     render(){
         return(
             <div style={{paddingTop:"3%",height:"100vh"}} id="tictactoe">
+                <Navbar/>
                 {/* display current turn */}
                 <div id="play-header">
                     <h1 id="who-turn"></h1>
