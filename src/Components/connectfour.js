@@ -1,5 +1,6 @@
 import React from 'react';
 import Navbar from './navbar.js';
+/* eslint-disable */
 /* TO DO
 * develop diagonal wins
 * develop across wins
@@ -107,6 +108,7 @@ class ConnectFour extends React.Component {
 
         for (var i = 1; i < 7; i++) {
             var currArrow = document.getElementById(`arrow-${i}`);
+            var newScore;
 
             currArrow.onclick = (event) => {
                 var row = parseInt(event.target.id.split('-')[1]);
@@ -120,7 +122,7 @@ class ConnectFour extends React.Component {
                             let modal = document.getElementById("modal-div");
                             let span = document.getElementsByClassName("close")[0];
                             document.getElementById('modal-header').innerText = `${this.getAccross(gameBoard)} Wins Down!`;
-                            var newScore = this.state.currentScore;
+                            newScore = this.state.currentScore;
                             newScore[this.getAccross(gameBoard)] += 1;
                             this.setState({ currentScore:newScore });
                             scoreHeader.innerText = `Red: ${this.state.currentScore['Red']}, Blue: ${this.state.currentScore["Blue"]}`;;
@@ -142,7 +144,7 @@ class ConnectFour extends React.Component {
                             let modal = document.getElementById("modal-div");
                             let span = document.getElementsByClassName("close")[0];
                             document.getElementById('modal-header').innerText = `${this.getDiagonal(gameBoard)} Wins Diagonal!`;
-                            var newScore = this.state.currentScore;
+                            newScore = this.state.currentScore;
                             newScore[this.getDiagonal(gameBoard)] += 1;
                             this.setState({ currentScore:newScore });
                             scoreHeader.innerText = `Red: ${this.state.currentScore['Red']}, Blue: ${this.state.currentScore["Blue"]}`;;
@@ -163,7 +165,7 @@ class ConnectFour extends React.Component {
                             let modal = document.getElementById("modal-div");
                             let span = document.getElementsByClassName("close")[0];
                             document.getElementById('modal-header').innerText = `${this.getDown(gameBoard)} Wins Down!`;
-                            var newScore = this.state.currentScore;
+                            newScore = this.state.currentScore;
                             newScore[this.getDown(gameBoard)] += 1;
                             this.setState({ currentScore:newScore });
                             scoreHeader.innerText = `Red: ${this.state.currentScore['Red']}, Blue: ${this.state.currentScore["Blue"]}`;;
