@@ -1,8 +1,6 @@
 import React from 'react';
 import Navbar from './navbar.js';
-/* eslint-disable */
 /* TO DO
-* develop diagonal wins
 * develop across wins
 */
 class ConnectFour extends React.Component {
@@ -97,6 +95,92 @@ class ConnectFour extends React.Component {
         return false;
     }
 
+    onClickArrow = (event,newScore,gameBoard,turnHeader,scoreHeader) => {
+        var row = parseInt(event.target.id.split('-')[1]);
+        for (var j = 0; j < gameBoard[row].length; j++) {
+            if (!gameBoard[row][j]) {
+                gameBoard[row][j] = this.state.player;
+                document.getElementById(`${(gameBoard[row].length-1)-j}${row}`).style.backgroundColor = this.state.player;
+                // find if theres a winner
+                if (this.getAccross(gameBoard)) {
+                    let modal = document.getElementById("modal-div");
+                    let span = document.getElementsByClassName("close")[0];
+                    document.getElementById('modal-header').innerText = `${this.getAccross(gameBoard)} Wins Down!`;
+                    newScore = this.state.currentScore;
+                    newScore[this.getAccross(gameBoard)] += 1;
+                    this.setState({ currentScore:newScore });
+                    scoreHeader.innerText = `Red: ${this.state.currentScore['Red']}, Blue: ${this.state.currentScore["Blue"]}`;;
+
+                    gameBoard = this.loadBoard();
+                    modal.style.display = "block";
+                    span.onclick = () => { // clear board and being new game
+                        modal.style.display = "none";
+                        this.setState({ turn:0 });
+                        /*for (var j = 1; j < 10; j++) { // clear all turns on board
+                            let elem = document.getElementById("player-" + j);
+
+                            if (elem) { elem.parentNode.removeChild(elem); }
+                            modal.style.display = "none";
+                        }*/
+                    }
+
+                } else if (this.getDiagonal(gameBoard)) {
+                    let modal = document.getElementById("modal-div");
+                    let span = document.getElementsByClassName("close")[0];
+                    document.getElementById('modal-header').innerText = `${this.getDiagonal(gameBoard)} Wins Diagonal!`;
+                    newScore = this.state.currentScore;
+                    newScore[this.getDiagonal(gameBoard)] += 1;
+                    this.setState({ currentScore:newScore });
+                    scoreHeader.innerText = `Red: ${this.state.currentScore['Red']}, Blue: ${this.state.currentScore["Blue"]}`;;
+
+                    gameBoard = this.loadBoard();
+                    modal.style.display = "block";
+                    span.onclick = () => { // clear board and being new game
+                        modal.style.display = "none";
+                        this.setState({ turn:0 });
+                        /*for (var j = 1; j < 10; j++) { // clear all turns on board
+                            let elem = document.getElementById("player-" + j);
+
+                            if (elem) { elem.parentNode.removeChild(elem); }
+                            modal.style.display = "none";
+                        }*/
+                    }
+                } else if (this.getDown(gameBoard)) {
+                    let modal = document.getElementById("modal-div");
+                    let span = document.getElementsByClassName("close")[0];
+                    document.getElementById('modal-header').innerText = `${this.getDown(gameBoard)} Wins Down!`;
+                    newScore = this.state.currentScore;
+                    newScore[this.getDown(gameBoard)] += 1;
+                    this.setState({ currentScore:newScore });
+                    scoreHeader.innerText = `Red: ${this.state.currentScore['Red']}, Blue: ${this.state.currentScore["Blue"]}`;;
+
+                    gameBoard = this.loadBoard();
+                    modal.style.display = "block";
+                    span.onclick = () => { // clear board and being new game
+                        modal.style.display = "none";
+                        this.setState({ turn:0 });
+                        /*for (var j = 1; j < 10; j++) { // clear all turns on board
+                            let elem = document.getElementById("player-" + j);
+
+                            if (elem) { elem.parentNode.removeChild(elem); }
+                            modal.style.display = "none";
+                        }*/
+                    }
+                }
+                break;
+            }
+        }
+        this.setState({ player:this.state.player === "Red" ? "Blue" : "Red" });
+        turnHeader.innerText = `${this.state.player}'s Turn!`;
+    }
+
+
+
+    closeModal = (modal) => {
+        modal.style.display = "none";
+        this.setState({ turn:0 });
+    }
+
     // when elements load
     componentDidMount(){
         document.title = "Connect Four";
@@ -105,91 +189,13 @@ class ConnectFour extends React.Component {
         turnHeader.innerText = `${this.state.player}'s Turn!`;
         let scoreHeader = document.getElementById('curr-score');
         scoreHeader.innerText = `Red: ${this.state.currentScore['Red']}, Blue: ${this.state.currentScore["Blue"]}`;
+        var newScore = "";
 
         for (var i = 1; i < 7; i++) {
             var currArrow = document.getElementById(`arrow-${i}`);
-            var newScore;
-
-            currArrow.onclick = (event) => {
-                var row = parseInt(event.target.id.split('-')[1]);
-
-                for (var j = 0; j < gameBoard[row].length; j++) {
-                    if (!gameBoard[row][j]) {
-                        gameBoard[row][j] = this.state.player;
-                        document.getElementById(`${(gameBoard[row].length-1)-j}${row}`).style.backgroundColor = this.state.player;
-                        // find if theres a winner
-                        if (this.getAccross(gameBoard)) {
-                            let modal = document.getElementById("modal-div");
-                            let span = document.getElementsByClassName("close")[0];
-                            document.getElementById('modal-header').innerText = `${this.getAccross(gameBoard)} Wins Down!`;
-                            newScore = this.state.currentScore;
-                            newScore[this.getAccross(gameBoard)] += 1;
-                            this.setState({ currentScore:newScore });
-                            scoreHeader.innerText = `Red: ${this.state.currentScore['Red']}, Blue: ${this.state.currentScore["Blue"]}`;;
-
-                            gameBoard = this.loadBoard();
-                            modal.style.display = "block";
-                            span.onclick = () => { // clear board and being new game
-                                modal.style.display = "none";
-                                this.setState({ turn:0 });
-                                /*for (var j = 1; j < 10; j++) { // clear all turns on board
-                                    let elem = document.getElementById("player-" + j);
-
-                                    if (elem) { elem.parentNode.removeChild(elem); }
-                                    modal.style.display = "none";
-                                }*/
-                            }
-
-                        } else if (this.getDiagonal(gameBoard)) {
-                            let modal = document.getElementById("modal-div");
-                            let span = document.getElementsByClassName("close")[0];
-                            document.getElementById('modal-header').innerText = `${this.getDiagonal(gameBoard)} Wins Diagonal!`;
-                            newScore = this.state.currentScore;
-                            newScore[this.getDiagonal(gameBoard)] += 1;
-                            this.setState({ currentScore:newScore });
-                            scoreHeader.innerText = `Red: ${this.state.currentScore['Red']}, Blue: ${this.state.currentScore["Blue"]}`;;
-
-                            gameBoard = this.loadBoard();
-                            modal.style.display = "block";
-                            span.onclick = () => { // clear board and being new game
-                                modal.style.display = "none";
-                                this.setState({ turn:0 });
-                                /*for (var j = 1; j < 10; j++) { // clear all turns on board
-                                    let elem = document.getElementById("player-" + j);
-
-                                    if (elem) { elem.parentNode.removeChild(elem); }
-                                    modal.style.display = "none";
-                                }*/
-                            }
-                        } else if (this.getDown(gameBoard)) {
-                            let modal = document.getElementById("modal-div");
-                            let span = document.getElementsByClassName("close")[0];
-                            document.getElementById('modal-header').innerText = `${this.getDown(gameBoard)} Wins Down!`;
-                            newScore = this.state.currentScore;
-                            newScore[this.getDown(gameBoard)] += 1;
-                            this.setState({ currentScore:newScore });
-                            scoreHeader.innerText = `Red: ${this.state.currentScore['Red']}, Blue: ${this.state.currentScore["Blue"]}`;;
-
-                            gameBoard = this.loadBoard();
-                            modal.style.display = "block";
-                            span.onclick = () => { // clear board and being new game
-                                modal.style.display = "none";
-                                this.setState({ turn:0 });
-                                /*for (var j = 1; j < 10; j++) { // clear all turns on board
-                                    let elem = document.getElementById("player-" + j);
-
-                                    if (elem) { elem.parentNode.removeChild(elem); }
-                                    modal.style.display = "none";
-                                }*/
-                            }
-                        }
-                        break;
-                    }
-                }
-                this.setState({ player:this.state.player === "Red" ? "Blue" : "Red" });
-                turnHeader.innerText = `${this.state.player}'s Turn!`;
-            }
+            currArrow.onclick = (event) => this.onClickArrow(event,newScore,gameBoard,turnHeader,scoreHeader);
         }
+
     }
     render(){
         return(
@@ -197,8 +203,8 @@ class ConnectFour extends React.Component {
                 <Navbar/>
                 {/* display current turn */}
                 <div style={{textAlign:"center"}}>
-                    <h1 style={{color:"black"}} id="who-turn"></h1>
-                    <h5 id="curr-score"></h5>
+                    <h1 id="who-turn" style={{color:"black"}}> </h1>
+                    <h5 id="curr-score"> </h5>
                 </div>
 
                 {/* modal for error/winner messages */}
@@ -206,7 +212,7 @@ class ConnectFour extends React.Component {
                     {/* modal content */}
                     <div className="modal-content">
                         <span className="close">&times;</span>
-                        <h1 id="modal-header"></h1>
+                        <h1 id="modal-header"> </h1>
                     </div>
                 </div>
 
