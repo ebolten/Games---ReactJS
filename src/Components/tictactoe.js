@@ -122,7 +122,7 @@ class TicTacToe extends React.Component {
                 this.setState({ currentScore:this.state.currentScore+1 });
 
                 scoreText.innerText = `Player X: ${this.state.currentScore['X']} - Player O: ${this.state.currentScore['O']}`;
-                document.getElementById('modal-header').innerText = `${this.state.player} Is The Winner!`;
+                document.getElementById('modal-header').innerText = `${this.state.player} Is The Winner! Refresh to Play Again.`;
 
                 modal.style.display = "block";
                 span.onclick = () => { // clear board and being new game
@@ -217,11 +217,8 @@ class TicTacToe extends React.Component {
             // get all squares on board
             let squares = document.getElementsByClassName("square-sm");
             for (let i = 0; i < squares.length; i++) {
-
                 // onclick method for square
                 squares[i].onclick = (event) =>  this.onBoxClick(event,gameBoard,modal,scoreText,span,playerTurn,i);
-
-
             }
         }
     }
