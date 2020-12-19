@@ -122,7 +122,7 @@ class TicTacToe extends React.Component {
                 this.setState({ currentScore:this.state.currentScore+1 });
 
                 scoreText.innerText = `Player X: ${this.state.currentScore['X']} - Player O: ${this.state.currentScore['O']}`;
-                document.getElementById('modal-header').innerText = `${this.state.player} Is The Winner! Refresh to Play Again.`;
+                document.getElementById('modal-header').innerText = `${this.state.player} Is The Winner!`;
 
                 modal.style.display = "block";
                 span.onclick = () => { // clear board and being new game
@@ -132,6 +132,7 @@ class TicTacToe extends React.Component {
                         var elem = document.getElementById("player-" + j);
                         if (elem) { elem.parentNode.removeChild(elem); }
                         modal.style.display = "none";
+                        location.reload();
                     }
                 }
             }
