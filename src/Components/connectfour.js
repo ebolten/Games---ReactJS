@@ -115,6 +115,7 @@ class ConnectFour extends React.Component {
                     modal.style.display = "block";
                     span.onclick = () => { // clear board and being new game
                         modal.style.display = "none";
+                        window.location.reload();
                         this.setState({ turn:0 });
                         /*for (var j = 1; j < 10; j++) { // clear all turns on board
                             let elem = document.getElementById("player-" + j);
@@ -137,6 +138,7 @@ class ConnectFour extends React.Component {
                     modal.style.display = "block";
                     span.onclick = () => { // clear board and being new game
                         modal.style.display = "none";
+                        window.location.reload();
                         this.setState({ turn:0 });
                         /*for (var j = 1; j < 10; j++) { // clear all turns on board
                             let elem = document.getElementById("player-" + j);
@@ -158,6 +160,7 @@ class ConnectFour extends React.Component {
                     modal.style.display = "block";
                     span.onclick = () => { // clear board and being new game
                         modal.style.display = "none";
+                        window.location.reload();
                         this.setState({ turn:0 });
                         /*for (var j = 1; j < 10; j++) { // clear all turns on board
                             let elem = document.getElementById("player-" + j);
@@ -178,6 +181,7 @@ class ConnectFour extends React.Component {
 
     closeModal = (modal) => {
         modal.style.display = "none";
+        window.location.reload();
         this.setState({ turn:0 });
     }
 
