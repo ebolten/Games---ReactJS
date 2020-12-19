@@ -132,7 +132,7 @@ class TicTacToe extends React.Component {
                         var elem = document.getElementById("player-" + j);
                         if (elem) { elem.parentNode.removeChild(elem); }
                         modal.style.display = "none";
-                        location.reload();
+                        window.location.reload();
                     }
                 }
             }
