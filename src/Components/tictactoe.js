@@ -81,8 +81,80 @@ class TicTacToe extends React.Component {
         return "";
     }
 
+
+    onBoxClick = (event,gameBoard,modal,scoreText,span,playerTurn,i) => {
+
+        let square = document.getElementById(event.srcElement.id); // get square object
+
+        // create new text for square and add styling
+        let playerNow = document.createElement('h1');
+        playerNow.id = "player-" + event.srcElement.id;
+        playerNow.innerText = this.state.player;
+        
+        playerNow.style.fontSize = "60px"; playerNow.style.marginTop = '10px';
+        playerNow.style.position = 'fixed'; playerNow.style.marginLeft = '21px'; playerNow.style.marginRight = '25px';
+
+        // set turn in gameboard
+        if (gameBoard.get(event.srcElement.id) === "") { // if the spot is not filled
+            gameBoard.set(event.srcElement.id,this.state.player);
+            square.appendChild(playerNow);
+            this.setState({ turn:this.state.turn+1 });
+            let win = this.checkWinner(gameBoard);
+
+            // if board becomes filled with no winners
+            if (!win && this.state.turn === 9) {
+                gameBoard = this.loadBoard();
+                document.getElementById('modal-header').innerText = `The Board is Filled! Try Again.`;
+                modal.style.display = "block";
+                span.onclick = () => { // clear board and being new game
+                    modal.style.display = "none";
+                    this.setState({ turn:0 });
+                    for (var j = 1; j < 10; j++) { // clear all turns on board
+                        let elem = document.getElementById("player-" + j);
+
+                        if (elem) { elem.parentNode.removeChild(elem); }
+                        modal.style.display = "none";
+                    }
+                }
+            }
+            if (win) { // if a winner is found
+                gameBoard = this.loadBoard();
+                this.setState({ currentScore:this.state.currentScore+1 });
+
+                scoreText.innerText = `Player X: ${this.state.currentScore['X']} - Player O: ${this.state.currentScore['O']}`;
+                document.getElementById('modal-header').innerText = `${this.state.player} Is The Winner!`;
+
+                modal.style.display = "block";
+                span.onclick = () => { // clear board and being new game
+                    modal.style.display = "none";
+                    this.setState({ turn:0 });
+                    for (var j = 1; j < 10; j++) { // clear all turns on board
+                        var elem = document.getElementById("player-" + j);
+                        if (elem) { elem.parentNode.removeChild(elem); }
+                        modal.style.display = "none";
+                    }
+                }
+            }
+            if (i % 2 === 0) { // change players per turn
+                if (this.state.player === "X") { this.setState({player:"O"}); }
+                else { this.setState({player:"X"}); }
+            } else if (i % 2 !== 0) { // depends on even/odd (every other turn)
+                if (this.state.player === "X") { this.setState({player:"O"}); }
+                else { this.setState({player:"X"}); }
+            }
+            playerTurn.innerText = `Player ${this.state.player}'s Turn!`;
+        } else { // if the player tries to go for a spot that is already taken
+            document.getElementById('modal-header').innerText = "That Spot is Taken!";
+            modal.style.display = "block";
+            span.onclick = function() {
+                modal.style.display = "none";
+            }
+        }
+    }
+
+
     // when elements have loaded
-    componentDidMount(){
+    componentDidMount() {
         document.title = "Tic Tac Toe";
         document.getElementById('who-turn').style.margin = '0px';
         document.getElementById('curr-score').style.margin = '5px';
@@ -144,74 +216,12 @@ class TicTacToe extends React.Component {
 
             // get all squares on board
             let squares = document.getElementsByClassName("square-sm");
-            for (var i = 0; i < squares.length; i++) {
-                squares[i].onclick = (event) => { // onclick method for square
-                    let square = document.getElementById(event.srcElement.id); // get square object
+            for (let i = 0; i < squares.length; i++) {
 
-                    // create new text for square and add styling
-                    let playerNow = document.createElement('h1');
-                    playerNow.id = "player-" + event.srcElement.id;
-                    playerNow.innerText = this.state.player;
-                    
-                    playerNow.style.fontSize = "60px"; playerNow.style.marginTop = '10px';
-                    playerNow.style.position = 'fixed'; playerNow.style.marginLeft = '21px'; playerNow.style.marginRight = '25px';
+                // onclick method for square
+                squares[i].onclick = (event) =>  this.onBoxClick(event,gameBoard,modal,scoreText,span,playerTurn,i);
 
-                    // set turn in gameboard
-                    if (gameBoard.get(event.srcElement.id) === "") { // if the spot is not filled
-                        gameBoard.set(event.srcElement.id,this.state.player);
-                        square.appendChild(playerNow);
-                        this.setState({ turn:this.state.turn+1 });
-                        let win = this.checkWinner(gameBoard);
 
-                        // if board becomes filled with no winners
-                        if (!win && this.state.turn == 9) {
-                            gameBoard = this.loadBoard();
-                            document.getElementById('modal-header').innerText = `The Board is Filled! Try Again.`;
-                            modal.style.display = "block";
-                            span.onclick = () => { // clear board and being new game
-                                modal.style.display = "none";
-                                this.setState({ turn:0 });
-                                for (var j = 1; j < 10; j++) { // clear all turns on board
-                                    let elem = document.getElementById("player-" + j);
-
-                                    if (elem) { elem.parentNode.removeChild(elem); }
-                                    modal.style.display = "none";
-                                }
-                            }
-                        }
-                        if (win) { // if a winner is found
-                            gameBoard = this.loadBoard();
-                            this.state.currentScore[this.state.player] += 1;
-                            scoreText.innerText = `Player X: ${this.state.currentScore['X']} - Player O: ${this.state.currentScore['O']}`;
-                            document.getElementById('modal-header').innerText = `${this.state.player} Is The Winner!`;
-
-                            modal.style.display = "block";
-                            span.onclick = () => { // clear board and being new game
-                                modal.style.display = "none";
-                                this.setState({ turn:0 });
-                                for (var j = 1; j < 10; j++) { // clear all turns on board
-                                    var elem = document.getElementById("player-" + j);
-                                    if (elem) { elem.parentNode.removeChild(elem); }
-                                    modal.style.display = "none";
-                                }
-                            }
-                        }
-                        if (i % 2 === 0) { // change players per turn
-                            if (this.state.player === "X") { this.state.player = "O"; }
-                            else { this.state.player = "X"; }
-                        } else if (i % 2 !== 0) { // depends on even/odd (every other turn)
-                            if (this.state.player === "X") { this.state.player = "O"; }
-                            else { this.state.player = "X"; }
-                        }
-                        playerTurn.innerText = `Player ${this.state.player}'s Turn!`;
-                    } else { // if the player tries to go for a spot that is already taken
-                        document.getElementById('modal-header').innerText = "That Spot is Taken!";
-                        modal.style.display = "block";
-                        span.onclick = function() {
-                            modal.style.display = "none";
-                        }
-                    }
-                }
             }
         }
     }
@@ -221,8 +231,8 @@ class TicTacToe extends React.Component {
                 <Navbar/>
                 {/* display current turn */}
                 <div id="play-header">
-                    <h1 id="who-turn"></h1>
-                    <h5 id="curr-score"></h5>
+                    <h1 id="who-turn"> </h1>
+                    <h5 style={{visibility:'hidden'}} id="curr-score"> </h5>
                 </div>
 
                 {/* modal for error/winner messages */ }
@@ -230,7 +240,7 @@ class TicTacToe extends React.Component {
                     {/* modal content */}
                     <div className="modal-content">
                         <span className="close">&times;</span>
-                        <h1 id="modal-header"></h1>
+                        <h1 id="modal-header"> </h1>
                     </div>
                 </div>
 

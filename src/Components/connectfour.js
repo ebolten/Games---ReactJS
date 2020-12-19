@@ -204,7 +204,7 @@ class ConnectFour extends React.Component {
                 {/* display current turn */}
                 <div style={{textAlign:"center"}}>
                     <h1 id="who-turn" style={{color:"black"}}> </h1>
-                    <h5 id="curr-score"> </h5>
+                    <h5 style={{visibility:'hidden'}} id="curr-score"> </h5>
                 </div>
 
                 {/* modal for error/winner messages */}
